@@ -21,6 +21,16 @@
 #define SPEED 200 // Motor speed
 #define DEFAULT_TIME 500 // Default time for movement
 
+// Function Declarations
+long distanceInCM();
+void forward(int time = DEFAULT_TIME);
+void reverse(int time = DEFAULT_TIME);
+void turnRight(int time = DEFAULT_TIME);
+void turnLeft(int time = DEFAULT_TIME);
+void stopMoving();
+void turnMotorsOff();
+void setMotorSpeed(int speed = SPEED);
+
 void setup()
 {
   Serial.begin(9600); // Open serial for communication
