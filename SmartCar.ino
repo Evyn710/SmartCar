@@ -18,7 +18,7 @@
 #define ECHO A4 // Receives pulse
 #define TRIG A5 // Sends pulse
 
-#define SPEED 100 // Motor speed
+#define SPEED 200 // Motor speed
 #define DEFAULT_TIME 500 // Default time for movement
 
 void setup()
