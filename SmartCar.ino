@@ -75,21 +75,24 @@ void loop()
 // Move car forward
 void forward(int time = DEFAULT_TIME)
 {
-  
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN3, HIGH);
+  delay(time);
+  stopMoving();
 }
 
 // Move car backwards
-void reverse()
+void reverse(int time = DEFAULT_TIME)
 {
 
 }
 
-void turnRight()
+void turnRight(int time = DEFAULT_TIME)
 {
 
 }
 
-void turnLeft()
+void turnLeft(int time = DEFAULT_TIME)
 {
 
 }
@@ -97,6 +100,11 @@ void turnLeft()
 void stopMoving()
 {
   
+}
+
+void turnMotorsOff()
+{
+   
 }
 
 void setMoveSpeed()
