@@ -55,7 +55,7 @@ void setup()
   
   // PUT INITIAL ACTIONS BELOW
   forward(3000);
-  backward(3000);
+  reverse(3000);
   turnRight(2000);
   turnLeft(2000);
   delay(5000);
