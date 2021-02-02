@@ -54,6 +54,11 @@ void setup()
   setMotorSpeed(); // Set move speed to SPEED
   
   // PUT INITIAL ACTIONS BELOW
+  forward(3000);
+  backward(3000);
+  turnRight(2000);
+  turnLeft(2000);
+  delay(5000);
   
 }
 
