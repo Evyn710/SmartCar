@@ -1,5 +1,5 @@
 /*
-   Smart Car Program Version 0.2
+   Smart Car Program Version 0.3
    By: Evyn Rissling, Curtis Eck, Brandon Jones
 
 */
@@ -11,8 +11,8 @@
 
 #define IN1 7 // Left side forward
 #define IN2 8 // Left side back
-#define IN3 11 // Right side forward
-#define IN4 9 // Right side back
+#define IN3 9 // Right side forward
+#define IN4 11 // Right side back
 
 #define SRVO 3 // Ultrasonic servo
 #define ECHO A4 // Receives pulse
@@ -78,7 +78,7 @@ long distanceInCM()
 void forward(int time = DEFAULT_TIME)
 {
    digitalWrite(IN1, HIGH);
-   digitalWrite(IN3, HIGH);
+   digitalWrite(IN4, HIGH);
    delay(time);
    stopMoving();
 }
@@ -87,7 +87,7 @@ void forward(int time = DEFAULT_TIME)
 void reverse(int time = DEFAULT_TIME)
 {
    digitalWrite(IN2, HIGH);
-   digitalWrite(IN4, HIGH);
+   digitalWrite(IN3, HIGH);
    delay(time);
    stopMoving();
 }
@@ -101,7 +101,7 @@ void turnRight(int time = DEFAULT_TIME)
 
 void turnLeft(int time = DEFAULT_TIME)
 {
-  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, HIGH);
   delay(time);
   stopMoving();
 }
