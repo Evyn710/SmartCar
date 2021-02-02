@@ -1,5 +1,5 @@
 /*
-   Smart Car Program Version 0.1
+   Smart Car Program Version 0.2
    By: Evyn Rissling, Curtis Eck, Brandon Jones
 
 */
@@ -27,42 +27,6 @@ void setup()
   pinMode(IN4, OUTPUT); // right side backwards
 
   setMoveSpeed();
-  
-  digitalWrite(IN1, HIGH); // try IN1 for 2 seconds
-  delay(2000);
-  digitalWrite(IN1, LOW);
-
-  digitalWrite(IN2, HIGH); // try IN2 for 2 seconds
-  delay(2000);
-  digitalWrite(IN2, LOW);
-  
-  digitalWrite(IN3, HIGH); // try IN3 for 2 seconds
-  delay(2000);
-  digitalWrite(IN3, LOW);
-
-  digitalWrite(IN4, HIGH); // try IN4 for 2 seconds
-  delay(2000);
-  digitalWrite(IN4, LOW);
-
-  // Try disabling motor so we know which side ENA is
-  digitalWrite(ENB, LOW);
-  
-  digitalWrite(IN1, HIGH); // try IN1 for 2 seconds
-  delay(2000);
-  digitalWrite(IN1, LOW);
-
-  digitalWrite(IN2, HIGH); // try IN2 for 2 seconds
-  delay(2000);
-  digitalWrite(IN2, LOW);
-
-  digitalWrite(IN3, HIGH); // try IN3 for 2 seconds
-  delay(2000);
-  digitalWrite(IN3, LOW);
-
-  digitalWrite(IN4, HIGH); // try IN4 for 2 seconds
-  delay(2000);
-  digitalWrite(IN4, LOW);
-
   
 }
 
@@ -99,7 +63,9 @@ void turnRight(int time = DEFAULT_TIME)
 
 void turnLeft(int time = DEFAULT_TIME)
 {
-  
+  digitalWrite(IN3, HIGH);
+  delay(time);
+  stopMoving();
 }
 
 void stopMoving()
@@ -112,11 +78,12 @@ void stopMoving()
 
 void turnMotorsOff()
 {
-   
+   digitalWrite(ENA, LOW);
+   digitalWrite(ENB, LOW);
 }
 
-void setMoveSpeed()
+void setMotorSpeed(int speed = SPEED)
 {
-  analogWrite(ENA, SPEED);
-  analogWrite(ENB, SPEED);
+  analogWrite(ENA, speed);
+  analogWrite(ENB, speed);
 }
