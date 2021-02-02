@@ -4,6 +4,8 @@
 
 */
 
+#include <Servo.h>
+
 #define ENA 5 // Motor A Enable (Left)
 #define ENB 6 // Motor B Enable (Right)
 
@@ -11,13 +13,18 @@
 #define IN2 8 // Left side back
 #define IN3 9 // Right side forward
 #define IN4 11 // Right side back
+
 #define SRVO 3 // Ultrasonic servo
+#define ECHO A4 // Receives pulse
+#define TRIG A5 // Sends pulse
 
 #define SPEED 100 // Motor speed
 #define DEFAULT_TIME 500 // Default time for movement
 
 void setup()
 {
+  Serial.begin(9600); // Open serial for communication
+  
   pinMode(ENA, OUTPUT); // enables left side
   pinMode(ENB, OUTPUT); // enables right side
 
@@ -25,8 +32,21 @@ void setup()
   pinMode(IN2, OUTPUT); // left side backwards
   pinMode(IN3, OUTPUT); // right side forward
   pinMode(IN4, OUTPUT); // right side backwards
-
-  setMoveSpeed();
+  
+  pinMode(ECHO, INPUT); // Pulse receiver
+  pinMode(TRIG, OUTPUT); // Pulse generator
+  
+  Servo ultraSonicServo;
+  ultraSonicServo.attach(SRVO); // Attach ultrasonic servo motor
+  
+  ultraSonicServo.write(90); // Turn Sensor to the middle
+  
+  setMoveSpeed(); // Set move speed to SPEED
+  
+  // PUT INITIAL ACTIONS BELOW
+  
+  
+  
   
 }
 
@@ -36,7 +56,18 @@ void loop()
 
 }
 
-// Move car forward
+long distanceInCM()
+{
+  digitalWrite(TRIG, LOW);
+  delayMicroseconds(2); // Set to low for 2 microseconds
+  digitalWrite(TRIG, HIGH);
+  delayMicroseconds(10); // Sends pulse out for 10 microseconds
+  digitalWrite(TRIG, LOW); 
+  
+  float duration = pulseIn(ECHO, HIGH);
+  return (long)(duration * 0.01715);
+}
+
 void forward(int time = DEFAULT_TIME)
 {
    digitalWrite(IN1, HIGH);
