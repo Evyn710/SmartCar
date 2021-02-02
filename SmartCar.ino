@@ -41,19 +41,25 @@ void setup()
   
   ultraSonicServo.write(90); // Turn Sensor to the middle
   
-  setMoveSpeed(); // Set move speed to SPEED
+  setMotorSpeed(); // Set move speed to SPEED
   
   // PUT INITIAL ACTIONS BELOW
   
-  
-  
-  
+  // test sequence
+  forward(3000);
+  reverse(3000);
+  turnRight(2000);
+  turnLeft(2000);
+  delay(5000);
 }
 
 void loop()
 {
-  // empty for now
-
+  // testing ultrasonic sensor
+  if (distanceInCM() < 20)
+  {
+    turnMotorsOff(); 
+  }
 }
 
 long distanceInCM()
