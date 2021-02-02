@@ -11,8 +11,8 @@
 
 #define IN1 7 // Left side forward
 #define IN2 8 // Left side back
-#define IN3 9 // Right side forward
-#define IN4 11 // Right side back
+#define IN3 11 // Right side forward
+#define IN4 9 // Right side back
 
 #define SRVO 3 // Ultrasonic servo
 #define ECHO A4 // Receives pulse
