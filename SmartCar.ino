@@ -11,15 +11,15 @@
 
 #define IN1 7 // Left side forward
 #define IN2 8 // Left side back
-#define IN3 9 // Right side forward
-#define IN4 11 // Right side back
+#define IN3 9 // Right side back
+#define IN4 11 // Right side forward
 
 #define SRVO 3 // Ultrasonic servo
 #define ECHO A4 // Receives pulse
 #define TRIG A5 // Sends pulse
 
 #define SPEED 200 // Motor speed
-#define DEFAULT_TIME 500 // Default time for movement
+#define DEFAULT_TIME 100 // Default time for movement
 
 // Function Declarations
 long distanceInCM();
@@ -40,8 +40,8 @@ void setup()
 
   pinMode(IN1, OUTPUT); // left side forward
   pinMode(IN2, OUTPUT); // left side backwards
-  pinMode(IN3, OUTPUT); // right side forward
-  pinMode(IN4, OUTPUT); // right side backwards
+  pinMode(IN3, OUTPUT); // right side backwards
+  pinMode(IN4, OUTPUT); // right side forward
   
   pinMode(ECHO, INPUT); // Pulse receiver
   pinMode(TRIG, OUTPUT); // Pulse generator
@@ -61,6 +61,11 @@ void loop()
 {
    Serial.println(distanceInCM());
    
+   forward();
+   if (distanceInCM() < 20)
+   {
+      turnMotorsOff();     
+   }
 }
 
 long distanceInCM()
