@@ -55,23 +55,11 @@ void setup()
   
   // PUT INITIAL ACTIONS BELOW
   
-  // test sequence
-  forward(3000);
-  reverse(3000);
-  turnRight(2000);
-  turnLeft(2000);
-  delay(5000);
 }
 
 void loop()
 {
-  // testing ultrasonic sensor
-  if (distanceInCM() < 20)
-  {
-    turnMotorsOff(); 
-  }
-  
-  forward();
+   Serial.println(distanceInCM());
    
 }
 
