@@ -75,31 +75,39 @@ void loop()
 // Move car forward
 void forward(int time = DEFAULT_TIME)
 {
-  digitalWrite(IN1, HIGH);
-  digitalWrite(IN3, HIGH);
-  delay(time);
-  stopMoving();
+   digitalWrite(IN1, HIGH);
+   digitalWrite(IN3, HIGH);
+   delay(time);
+   stopMoving();
 }
 
 // Move car backwards
 void reverse(int time = DEFAULT_TIME)
 {
-
+   digitalWrite(IN2, HIGH);
+   digitalWrite(IN4, HIGH);
+   delay(time);
+   stopMoving();
 }
 
 void turnRight(int time = DEFAULT_TIME)
 {
-
+   digitalWrite(IN1, HIGH);
+   delay(time);
+   stopMoving();
 }
 
 void turnLeft(int time = DEFAULT_TIME)
 {
-
+  
 }
 
 void stopMoving()
 {
-  
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
 }
 
 void turnMotorsOff()
