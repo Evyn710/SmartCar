@@ -73,6 +73,7 @@ void loop()
    }
 }
 
+// A function that returns the distance in front of the ultrasonic sensor in CM
 long distanceInCM()
 {
   digitalWrite(TRIG, LOW);
@@ -85,6 +86,7 @@ long distanceInCM()
   return (long)(duration * 0.01715);
 }
 
+// Move car forwards
 void forward(int time = DEFAULT_TIME)
 {
    digitalWrite(IN1, HIGH);
@@ -102,6 +104,7 @@ void reverse(int time = DEFAULT_TIME)
    stopMoving();
 }
 
+// Turns car in a wide right arc
 void turnRight(int time = DEFAULT_TIME)
 {
    digitalWrite(IN1, HIGH);
@@ -109,6 +112,7 @@ void turnRight(int time = DEFAULT_TIME)
    stopMoving();
 }
 
+// Turns car in a wide left arc
 void turnLeft(int time = DEFAULT_TIME)
 {
   digitalWrite(IN4, HIGH);
@@ -116,6 +120,7 @@ void turnLeft(int time = DEFAULT_TIME)
   stopMoving();
 }
 
+// Stops the car's motors temporarily
 void stopMoving()
 {
   digitalWrite(IN1, LOW);
@@ -124,12 +129,14 @@ void stopMoving()
   digitalWrite(IN4, LOW);
 }
 
+// Turns motor output pins off 
 void turnMotorsOff()
 {
    digitalWrite(ENA, LOW);
    digitalWrite(ENB, LOW);
 }
 
+// Sets the speed of the motors
 void setMotorSpeed(int speed = SPEED)
 {
   analogWrite(ENA, speed);
