@@ -60,6 +60,9 @@ void loop()
   {
     turnMotorsOff(); 
   }
+  
+  forward();
+   
 }
 
 long distanceInCM()
