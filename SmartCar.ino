@@ -4,15 +4,17 @@
 
 */
 
-#define ENA 5 // Motor A Enable
-#define ENB 6 // Motor B Enable
+#define ENA 5 // Motor A Enable (Left)
+#define ENB 6 // Motor B Enable (Right)
 
-#define IN1 7
-#define IN2 8
-#define IN3 9
-#define IN4 11
-#define SRVO 3
-#define SPEED 100
+#define IN1 7 // Left side forward
+#define IN2 8 // Left side back
+#define IN3 9 // Right side forward
+#define IN4 11 // Right side back
+#define SRVO 3 // Ultrasonic servo
+
+#define SPEED 100 // Motor speed
+#define DEFAULT_TIME 500 // Default time for movement
 
 void setup()
 {
@@ -33,7 +35,7 @@ void setup()
   digitalWrite(IN2, HIGH); // try IN2 for 2 seconds
   delay(2000);
   digitalWrite(IN2, LOW);
-
+  
   digitalWrite(IN3, HIGH); // try IN3 for 2 seconds
   delay(2000);
   digitalWrite(IN3, LOW);
@@ -71,9 +73,9 @@ void loop()
 }
 
 // Move car forward
-void forward()
+void forward(int time = DEFAULT_TIME)
 {
-
+  
 }
 
 // Move car backwards
