@@ -1,5 +1,5 @@
 /*
-   Smart Car Program Version 0.5
+   Smart Car Program Version 0.6
    By: Evyn Rissling, Curtis Eck, Brandon Jones
 
 */
@@ -74,11 +74,12 @@ void moveRightAroundObject()
    }
    else if (x > 30)
    {
+      forward();
       turnRight();
    }
    else
    {
-      forward(300);
+      forward(250);
    }
        
 }
