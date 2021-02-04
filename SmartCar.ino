@@ -52,7 +52,7 @@ void setup()
   
   ultraSonicServo.attach(SRVO); // Attach ultrasonic servo motor
   
-  ultraSonicServo.write(90); // Turn Sensor to the middle
+  ultraSonicServo.write(10); // Turn Sensor to the middle
   
   delay(3000);
 }
@@ -65,7 +65,7 @@ void loop()
 // Move in right circle around object
 void moveRightAroundObject()
 {
-   ultraSonicServo.write(0);
+   ultraSonicServo.write(10);
    long x = distanceInCM();
    
    if (x < 20)
