@@ -1,5 +1,5 @@
 /*
-   Smart Car Program Version 0.4
+   Smart Car Program Version 0.5
    By: Evyn Rissling, Curtis Eck, Brandon Jones
 
 */
@@ -53,25 +53,35 @@ void setup()
   
   setMotorSpeed(); // Set move speed to SPEED
   
-  // PUT INITIAL ACTIONS BELOW
-  forward(3000);
-  reverse(3000);
-  turnRight(2000);
-  turnLeft(2000);
-  delay(5000);
-  
+   delay(3000);
 }
 
 void loop()
 {
-   Serial.println(distanceInCM());
-   
-   forward();
-   if (distanceInCM() < 20)
-   {
-      turnMotorsOff();     
-   }
+   moveRightAroundObject();
 }
+
+// Move in right circle around object
+void moveRightAroundObject()
+{
+   ultraSonicServo.write(180);
+   long x = distanceInCM();
+   
+   if (x < 20)
+   {
+      turnLeft();
+   }
+   else if (x > 30)
+   {
+      turnRight();
+   }
+   else
+   {
+      forward()
+   }
+       
+}
+
 
 // A function that returns the distance in front of the ultrasonic sensor in CM
 long distanceInCM()
