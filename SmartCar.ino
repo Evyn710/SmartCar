@@ -64,7 +64,7 @@ void loop()
 // Move in right circle around object
 void moveRightAroundObject()
 {
-   ultraSonicServo.write(180);
+   ultraSonicServo.write(0);
    long x = distanceInCM();
    
    if (x < 20)
