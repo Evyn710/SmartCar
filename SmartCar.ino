@@ -31,6 +31,8 @@ void stopMoving();
 void turnMotorsOff();
 void setMotorSpeed(int speed = SPEED);
 
+Servo ultraSonicServo;
+
 void setup()
 {
   Serial.begin(9600); // Open serial for communication
@@ -46,14 +48,13 @@ void setup()
   pinMode(ECHO, INPUT); // Pulse receiver
   pinMode(TRIG, OUTPUT); // Pulse generator
   
-  Servo ultraSonicServo;
+  setMotorSpeed(); // Set move speed to SPEED
+  
   ultraSonicServo.attach(SRVO); // Attach ultrasonic servo motor
   
   ultraSonicServo.write(90); // Turn Sensor to the middle
   
-  setMotorSpeed(); // Set move speed to SPEED
-  
-   delay(3000);
+  delay(3000);
 }
 
 void loop()
