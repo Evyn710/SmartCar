@@ -78,7 +78,7 @@ void moveRightAroundObject()
    }
    else
    {
-      forward();
+      forward(300);
    }
        
 }
