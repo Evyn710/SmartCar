@@ -27,6 +27,8 @@ void forward(int time = DEFAULT_TIME);
 void reverse(int time = DEFAULT_TIME);
 void turnRight(int time = DEFAULT_TIME);
 void turnLeft(int time = DEFAULT_TIME);
+void turnSharpRight(int time = DEFAULT_TIME);
+void turnSharpLeft(int time = DEFAULT_TIME);
 void stopMoving();
 void turnMotorsOff();
 void setMotorSpeed(int speed = SPEED);
@@ -72,9 +74,14 @@ void moveRightAroundObject()
    {
       turnLeft();
    }
+   else if (x > 100)
+   {
+      forward(200);
+      turnSharpRight(500);
+      forward(200);
+   }
    else if (x > 30)
    {
-      forward();
       turnRight();
    }
    else
@@ -130,6 +137,24 @@ void turnLeft(int time = DEFAULT_TIME)
   digitalWrite(IN4, HIGH);
   delay(time);
   stopMoving();
+}
+
+// Turns car in a sharp right arc
+void turnSharpRight(int time = DEFAULT_TIME)
+{
+   digitalWrite(IN1, HIGH);
+   digitalWrite(IN3, HIGH);
+   delay(time);
+   stopMoving();
+}
+
+// Turns car in a sharp left arc
+void turnSharpLeft(int time = DEFAULT_TIME)
+{
+   digitalWrite(IN2, HIGH);
+   digitalWrite(IN4, HIGH);
+   delay(time);
+   stopMoving();
 }
 
 // Stops the car's motors temporarily
