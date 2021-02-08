@@ -76,23 +76,25 @@ void moveRightAroundObject()
    ultraSonicServo.write(10);
    
    int x = distanceInCM();
-   if (x < 30)
+   if (x < 10)
    {
       turnLeft(200);
    }
+   /*
    else if (x > 100)
    {
       forward(250);
       turnSharpRight(500);
       forward(500);
    }
-   else if (x > 0)
+   */
+   else if (x > 30)
    {
       turnRight(200);
    }
    else
    {
-      forward(250);
+      forward(400);
    }
 
 }
