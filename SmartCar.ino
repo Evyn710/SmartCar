@@ -76,7 +76,7 @@ void moveRightAroundObject()
    ultraSonicServo.write(10);
    
    int x = distanceInCM();
-   if (x < 10)
+   if (x < 15)
    {
       turnLeft(200);
    }
@@ -88,7 +88,7 @@ void moveRightAroundObject()
       forward(500);
    }
    */
-   else if (x > 30)
+   else if (x > 20)
    {
       turnRight(200);
    }
@@ -134,10 +134,7 @@ void reverse(int time = DEFAULT_TIME)
 void turnRight(int time = DEFAULT_TIME)
 {
    digitalWrite(IN1, HIGH);
-   analogWrite(ENB, 50);
-   digitalWrite(IN4, HIGH);
    delay(time);
-   setMotorSpeed();
    stopMoving();
 }
 
