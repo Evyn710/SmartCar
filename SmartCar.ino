@@ -34,7 +34,6 @@ void turnMotorsOff();
 void setMotorSpeed(int speed = SPEED);
 
 Servo ultraSonicServo;
-double distance = 0; // used in ultrasonic sensor distance averaging
 
 void setup()
 {
@@ -57,8 +56,12 @@ void setup()
   
   ultraSonicServo.write(10); // Turn Sensor to the middle
   
+  for (int i = 0; i < 10; i++)
+  {
+     distanceInCM();
+  }
   delay(3000);
-   
+  
 }
 
 void loop()
@@ -71,13 +74,8 @@ void moveRightAroundObject()
 {
    ultraSonicServo.write(10);
    
-   for (int c = 0; c < 5; c++) // reduces chance of misreading on sensor by averaging five readings
-   {
-      distance += distanceInCM();
-   }
-   
-   int x = (int)(distance / 5.0);
-   if (x < 20)
+   int x = distanceInCM();
+   if (x < 30)
    {
       turnLeft();
    }
@@ -87,7 +85,7 @@ void moveRightAroundObject()
       turnSharpRight(500);
       forward(200);
    }
-   else if (x > 30)
+   else if (x > 0)
    {
       turnRight();
    }
