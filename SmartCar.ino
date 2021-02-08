@@ -74,7 +74,7 @@ void moveRightAroundObject()
    for (int c = 0; c < 5; c++) // reduces chance of misreading on sensor by averaging five readings
    {
       distance += distanceInCM();
-   )
+   }
    
    int x = (int)(distance / 5.0);
    if (x < 20)
