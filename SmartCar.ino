@@ -60,6 +60,7 @@ void setup()
   {
      distanceInCM();
   }
+   
   delay(3000);
   
 }
@@ -77,26 +78,24 @@ void moveRightAroundObject()
    int x = distanceInCM();
    if (x < 30)
    {
-      turnLeft();
+      turnLeft(200);
    }
    else if (x > 100)
    {
-      forward(200);
+      forward(250);
       turnSharpRight(500);
-      forward(200);
+      forward(500);
    }
    else if (x > 0)
    {
-      turnRight();
+      turnRight(200);
    }
    else
    {
       forward(250);
    }
-      
-   distance = 0;
-}
 
+}
 
 // A function that returns the distance in front of the ultrasonic sensor in CM
 long distanceInCM()
