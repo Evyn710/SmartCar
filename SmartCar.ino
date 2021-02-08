@@ -95,7 +95,8 @@ void moveRightAroundObject()
    {
       forward(250);
    }
-       
+      
+   distance = 0;
 }
 
 
