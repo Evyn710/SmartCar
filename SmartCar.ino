@@ -94,7 +94,7 @@ void moveRightAroundObject()
    }
    else
    {
-      forward(400);
+      forward(300);
    }
 
 }
@@ -134,7 +134,10 @@ void reverse(int time = DEFAULT_TIME)
 void turnRight(int time = DEFAULT_TIME)
 {
    digitalWrite(IN1, HIGH);
+   analogWrite(ENB, 50);
+   digitalWrite(IN4, HIGH);
    delay(time);
+   setMotorSpeed();
    stopMoving();
 }
 
