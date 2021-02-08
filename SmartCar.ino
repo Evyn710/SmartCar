@@ -34,7 +34,7 @@ void turnMotorsOff();
 void setMotorSpeed(int speed = SPEED);
 
 Servo ultraSonicServo;
-long distance = 0; // used in ultrasonic sensor distance averaging
+double distance = 0; // used in ultrasonic sensor distance averaging
 
 void setup()
 {
@@ -76,7 +76,7 @@ void moveRightAroundObject()
       distance += distanceInCM();
    )
    
-   int x = distance / 5;
+   int x = (int)(distance / 5.0);
    if (x < 20)
    {
       turnLeft();
