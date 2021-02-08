@@ -18,7 +18,7 @@
 #define ECHO A4 // Receives pulse
 #define TRIG A5 // Sends pulse
 
-#define SPEED 200 // Motor speed
+#define SPEED 150 // Motor speed
 #define DEFAULT_TIME 100 // Default time for movement
 
 // Function Declarations
@@ -57,6 +57,8 @@ void setup()
   ultraSonicServo.write(10); // Turn Sensor to the middle
   
   delay(3000);
+   
+  long distance = 0; // used in ultrasonic sensor distance averaging
 }
 
 void loop()
@@ -68,8 +70,13 @@ void loop()
 void moveRightAroundObject()
 {
    ultraSonicServo.write(10);
-   long x = distanceInCM();
    
+   for (int c = 0; c < 5; c++) // reduces chance of misreading on sensor by averaging five readings
+   {
+      distance += distanceInCM();
+   )
+   
+   int x = distance / 5;
    if (x < 20)
    {
       turnLeft();
