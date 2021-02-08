@@ -1,5 +1,5 @@
 /*
-   Smart Car Program Version 0.7
+   Smart Car Program Version 0.71
    By: Evyn Rissling, Curtis Eck, Brandon Jones
 
 */
@@ -34,6 +34,7 @@ void turnMotorsOff();
 void setMotorSpeed(int speed = SPEED);
 
 Servo ultraSonicServo;
+long distance = 0; // used in ultrasonic sensor distance averaging
 
 void setup()
 {
@@ -58,7 +59,6 @@ void setup()
   
   delay(3000);
    
-  long distance = 0; // used in ultrasonic sensor distance averaging
 }
 
 void loop()
