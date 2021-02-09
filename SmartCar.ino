@@ -18,7 +18,7 @@
 #define ECHO A4 // Receives pulse
 #define TRIG A5 // Sends pulse
 
-#define SPEED 150 // Motor speed
+#define SPEED 200 // Motor speed
 #define DEFAULT_TIME 100 // Default time for movement
 
 // Function Declarations
@@ -76,7 +76,8 @@ void moveRightAroundObject()
    ultraSonicServo.write(10);
    
    int x = distanceInCM();
-   if (x < 15)
+   
+   if (x < 20)
    {
       turnLeft(200);
    }
@@ -88,7 +89,7 @@ void moveRightAroundObject()
       forward(500);
    }
    */
-   else if (x > 20)
+   else if (x > 40)
    {
       turnRight(200);
    }
