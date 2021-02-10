@@ -1,5 +1,5 @@
 /*
-   Smart Car Program Version 0.8
+   Smart Car Program Version 0.81
    By: Evyn Rissling, Curtis Eck, Brandon Jones
 
 */
@@ -68,12 +68,12 @@ void loop()
 // Move in right circle around object
 void moveRightAroundObject()
 {
-  ultraSonicServo.write(0); // turns ultrasonic sensor to the right
+  ultraSonicServo.write(15); // turns ultrasonic sensor to the right
 
   int x = distanceInCM(); // pings distance away from object
   Serial.println(x); // for debug
   
-  if (x < 35) // if too close to the object, turn left
+  if (x < 30) // if too close to the object, turn left
   {
     left++;
     right = 0;
@@ -94,13 +94,13 @@ void moveRightAroundObject()
     if (sharpRight == 5) // again, it only does the turn if it has got 5 consistent readings
     {
       sharpRight = 0;
-      forward(500);
+      forward(750);
       turnSharpRight(500);
       forward(1000);
       forwardCounter = 0;
     }
   }
-  else if (x > 40) // if too far away, turn right
+  else if (x > 45) // if too far away, turn right
   {
     left = 0;
     right++;
@@ -194,7 +194,7 @@ void turnSharpLeft(int time = DEFAULT_TIME)
 // Stops the car's motors temporarily
 void stopMoving()
 {
-  digitalWrite(IN1, LOW);
+  digitalWrite(IN1, LOW); 
   digitalWrite(IN2, LOW);
   digitalWrite(IN3, LOW);
   digitalWrite(IN4, LOW);
