@@ -1,5 +1,5 @@
 /*
-   Smart Car Program Version 0.9
+   Smart Car Program Version 0.81
    By: Evyn Rissling, Curtis Eck, Brandon Jones
 
 */
@@ -21,13 +21,16 @@
 #define ECHO A4 // Receives pulse
 #define TRIG A5 // Sends pulse
 
-#define SPEED 200 // Motor speed DON"T CHANGE UNLESS REALLY NECESSARY
+#define SPEED 225 // Motor speed DON"T CHANGE UNLESS REALLY NECESSARY
 #define GYRO_Z_OFFSET -22 // define the gyroscope z offset
 
 // Function Declarations
 long distanceInCM();
 void forward();
+void rightForward();
+void reverse();
 void turnRight();
+void sharpTurnRight();
 void turnLeft();
 void stopMoving();
 void turnMotorsOff();
@@ -45,8 +48,7 @@ float previousTime;
 void setup()
 {
   Serial.begin(115200); // open serial for gyro testing
-  ultraSonicServo.write(15);
-  
+
   // Motor stuff
   pinMode(ENA, OUTPUT); // enables left side
   pinMode(ENB, OUTPUT); // enables right side
@@ -62,7 +64,8 @@ void setup()
   pinMode(ECHO, INPUT); // Pulse receiver
   pinMode(TRIG, OUTPUT); // Pulse generator
   ultraSonicServo.attach(SRVO); // Attach ultrasonic servo motor
-
+  ultraSonicServo.write(0);
+  
   // IMU Stuff
   Wire.begin();
   gyroScope.initialize(); // initialize the IMU
@@ -70,13 +73,46 @@ void setup()
   gyroScope.setZGyroOffset(GYRO_Z_OFFSET); // Set the z offset
   gyroScope.CalibrateGyro(6); // calibrate it again after the offset
 
+
+  //ACTUAL MOVEMENT CODE
+  moveRightAroundObject(); 
+
+  // turns robot 180 degrees around
+  gyroDegree = 0;
+  while (gyroDegree > -140)
+  {
+    gyroUpdate();
+    sharpTurnRight();
+  }
+  stopMoving();
+  
+  reverse();
+  delay(600);
+  stopMoving();
+  
+  ultraSonicServo.write(180);
+  delay(3000);
+  gyroDegree = 0;
+  
+  moveLeftAroundObject();
+
+  reverse();
+  delay(500);
+  stopMoving();
+
+  // turns robot 180 degrees around
+  gyroDegree = 0;
+  while (gyroDegree > -160)
+  {
+    gyroUpdate();
+    sharpTurnRight();
+  }
+  stopMoving();
 }
 
 void loop()
 {
-  gyroUpdate();
-  Serial.println(gyroDegree); // outputs orientation in degrees for troubleshooting
-  moveRightAroundObject(); // move right around the object forever
+  // nothing needs to be in loop()
 }
 
 void gyroUpdate()
@@ -99,26 +135,62 @@ void moveRightAroundObject()
 {
   ultraSonicServo.write(0); // turns ultrasonic sensor to the right
 
-  if (gyroDegree < -1790)
+  while (1)
   {
-    turnMotorsOff();
-    return;
-  }
+    gyroUpdate();
     
-  int x = distanceInCM(); // pings distance away from object
-  if (x < 30) // if too close to the object, turn left
-  {
-    turnLeft();
-  }
-  else if (x > 35) 
-  {
-    turnRight();
-  }
-  else
-  {
-    forward();
-  }
+    if (gyroDegree < -1780)
+    {
+      turnMotorsOff();
+      return;
+    }
 
+    int x = distanceInCM(); // pings distance away from object
+    if (x < 35) // if too close to the object, turn left
+    {
+      turnLeft();
+    }
+    else if (x > 40)
+    {
+      turnRight();
+    }
+    else
+    {
+      forward();
+    }
+
+  }
+}
+
+void moveLeftAroundObject()
+{
+  ultraSonicServo.write(180); // turns ultrasonic sensor to the left
+
+  while (1)
+  {
+    gyroUpdate();
+    
+    if (gyroDegree > 1790)
+    {
+      turnMotorsOff();
+      return;
+    }
+
+    int x = distanceInCM(); // pings distance away from object
+    if (x < 35) // if too close to the object, turn left
+    {
+      turnRight();
+    }
+    else if (x > 40)
+    {
+      turnLeft();
+    }
+    else
+    {
+      forward();
+    }
+
+  }
 }
 
 // A function that returns the distance in front of the ultrasonic sensor in CM
@@ -144,6 +216,15 @@ void forward()
   digitalWrite(IN4, HIGH);
 }
 
+void reverse()
+{
+  setMotorSpeed();
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+}
+
 // Turns car in a wide right arc
 void turnRight()
 {
@@ -151,8 +232,18 @@ void turnRight()
   digitalWrite(IN1, HIGH);
   digitalWrite(IN2, LOW);
   digitalWrite(IN3, LOW);
-  analogWrite(ENB, 10); // make this higher to make the turn wider
+  analogWrite(ENB, 0); // make this higher to make the turn wider
   digitalWrite(IN4, HIGH);
+}
+
+// does a clock wise turn in spot
+void sharpTurnRight()
+{
+  setMotorSpeed(150);
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
 }
 
 // Turns car in a wide left arc
@@ -162,7 +253,7 @@ void turnLeft()
   digitalWrite(IN4, HIGH);
   digitalWrite(IN3, LOW);
   digitalWrite(IN2, LOW);
-  analogWrite(ENA, 10); // make this higher to make the turn wider
+  analogWrite(ENA, 0); // make this higher to make the turn wider
   digitalWrite(IN1, HIGH);
 }
 
