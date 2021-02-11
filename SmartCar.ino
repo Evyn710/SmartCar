@@ -1,9 +1,13 @@
 /*
-   Smart Car Program Version 1.01
+   Smart Car Program Version 1.02
    By: Evyn Rissling, Curtis Eck, Brandon Jones
-
+   
+   This program makes the robot do five clockwise loops, 
+   turn around, and then do five counterclockwise loops, 
+   stopping in the same place it started.
 */
 
+// Including necessary libraries
 #include <Servo.h>
 #include <Wire.h>
 #include <I2Cdev.h>
@@ -40,10 +44,10 @@ void gyroUpdate();
 Servo ultraSonicServo; // new servo object
 MPU6050 gyroScope; // new MPU6050 object
 
-float gyroDegree = 0;
+float gyroDegree = 0; // setting the gyroscopes starting angle to 0
 
 boolean oneLoopComplete = false;
-float previousTime;
+float previousTime; // the previous time taken for the loop
 
 void setup()
 {
@@ -64,7 +68,7 @@ void setup()
   pinMode(ECHO, INPUT); // Pulse receiver
   pinMode(TRIG, OUTPUT); // Pulse generator
   ultraSonicServo.attach(SRVO); // Attach ultrasonic servo motor
-  ultraSonicServo.write(15);
+  ultraSonicServo.write(0);
   
   // IMU Stuff
   Wire.begin();
@@ -74,8 +78,9 @@ void setup()
   gyroScope.CalibrateGyro(6); // calibrate it again after the offset
 
 
-  //ACTUAL MOVEMENT CODE
-  moveRightAroundObject(); 
+  //ACTUAL MOVEMENT CODE STARTS HERE 
+   
+  moveRightAroundObject(); // This moves the robot 5 times around the object clockwise
 
   // turns robot 180 degrees around
   gyroDegree = 0;
@@ -86,16 +91,19 @@ void setup()
   }
   stopMoving();
   
+   // this reverses the robot to line it up with the side of the couch to help the sensor read properly
   reverse();
   delay(600);
   stopMoving();
   
+   // This changes the angle of the ultrasonic sensor and resets the gyroscope angle to zero again.
   ultraSonicServo.write(180);
   delay(3000);
   gyroDegree = 0;
   
-  moveLeftAroundObject();
-
+  moveLeftAroundObject(); // this moves the robot 5 times around the object counterclockwise
+   
+  // this reverses the robot to the original starting position 
   reverse();
   delay(500);
   stopMoving();
@@ -108,6 +116,8 @@ void setup()
     sharpTurnRight();
   }
   stopMoving();
+   
+  turnMotorsOff();
 }
 
 void loop()
@@ -115,6 +125,7 @@ void loop()
   // nothing needs to be in loop()
 }
 
+// this updates gyroDegree to the current orientation of the robot
 void gyroUpdate()
 {
   float gyroZ = gyroScope.getRotationZ() / 131.0; // get the current Z orientation in degrees/second
@@ -122,7 +133,7 @@ void gyroUpdate()
     float timeForOneLoop = micros() - previousTime; // calculates how long loop took
     gyroDegree += gyroZ * timeForOneLoop / 1000000.0; // calculates new orientation based on the degrees/s * seconds
   }
-  previousTime = micros();
+  previousTime = micros(); // previous time is now the current time
 
   // Change the boolean flag to true to enable collection of gyroscope data
   if (!oneLoopComplete) {
@@ -137,9 +148,9 @@ void moveRightAroundObject()
 
   while (1)
   {
-    gyroUpdate();
+    gyroUpdate(); // updates the gyroscope
     
-    if (gyroDegree < -1780)
+    if (gyroDegree < -1780) // turns the motors off if the car has completed 5 loops
     {
       turnMotorsOff();
       return;
@@ -150,11 +161,11 @@ void moveRightAroundObject()
     {
       turnLeft();
     }
-    else if (x > 37)
+    else if (x > 37) // if too far from the object, turn right
     {
       turnRight();
     }
-    else
+    else // go forwards otherwise
     {
       forward();
     }
@@ -168,26 +179,26 @@ void moveLeftAroundObject()
 
   while (1)
   {
-    gyroUpdate();
+    gyroUpdate(); // updates the orientation of the gyroscope
     
-    if (gyroDegree > 1790)
+    if (gyroDegree > 1790) // turns the motors off if 5 loops have been completed
     {
       turnMotorsOff();
       return;
     }
 
     int x = distanceInCM(); // pings distance away from object
-    if (x < 35) // if too close to the object, turn left
+    if (x < 35) // if too close to the object, turn right
     {
       turnRight();
     }
-    else if (x > 37)
+    else if (x > 37) // if too far from the object, turn left
     {
       turnLeft();
     }
     else
     {
-      forward();
+      forward(); // else, go forward
     }
 
   }
@@ -216,6 +227,7 @@ void forward()
   digitalWrite(IN4, HIGH);
 }
 
+// reverses the car
 void reverse()
 {
   setMotorSpeed();
