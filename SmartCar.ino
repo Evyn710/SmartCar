@@ -1,5 +1,5 @@
 /*
-   Smart Car Program Version 1.0
+   Smart Car Program Version 1.01
    By: Evyn Rissling, Curtis Eck, Brandon Jones
 
 */
@@ -21,7 +21,7 @@
 #define ECHO A4 // Receives pulse
 #define TRIG A5 // Sends pulse
 
-#define SPEED 225 // Motor speed DON"T CHANGE UNLESS REALLY NECESSARY
+#define SPEED 200 // Motor speed DON"T CHANGE UNLESS REALLY NECESSARY
 #define GYRO_Z_OFFSET -22 // define the gyroscope z offset
 
 // Function Declarations
@@ -64,7 +64,7 @@ void setup()
   pinMode(ECHO, INPUT); // Pulse receiver
   pinMode(TRIG, OUTPUT); // Pulse generator
   ultraSonicServo.attach(SRVO); // Attach ultrasonic servo motor
-  ultraSonicServo.write(0);
+  ultraSonicServo.write(15);
   
   // IMU Stuff
   Wire.begin();
@@ -150,7 +150,7 @@ void moveRightAroundObject()
     {
       turnLeft();
     }
-    else if (x > 40)
+    else if (x > 37)
     {
       turnRight();
     }
@@ -181,7 +181,7 @@ void moveLeftAroundObject()
     {
       turnRight();
     }
-    else if (x > 40)
+    else if (x > 37)
     {
       turnLeft();
     }
@@ -244,6 +244,7 @@ void sharpTurnRight()
   digitalWrite(IN2, LOW);
   digitalWrite(IN3, HIGH);
   digitalWrite(IN4, LOW);
+  
 }
 
 // Turns car in a wide left arc
