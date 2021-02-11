@@ -1,5 +1,5 @@
 /*
-   Smart Car Program Version 0.81
+   Smart Car Program Version 1.0
    By: Evyn Rissling, Curtis Eck, Brandon Jones
 
 */
