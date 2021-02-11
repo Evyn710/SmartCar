@@ -1,10 +1,13 @@
 /*
-   Smart Car Program Version 0.8
+   Smart Car Program Version 0.9
    By: Evyn Rissling, Curtis Eck, Brandon Jones
 
 */
 
 #include <Servo.h>
+#include <Wire.h>
+#include <I2Cdev.h>
+#include <MPU6050.h>
 
 #define ENA 5 // Motor A Enable (Left)
 #define ENB 6 // Motor B Enable (Right)
@@ -18,28 +21,33 @@
 #define ECHO A4 // Receives pulse
 #define TRIG A5 // Sends pulse
 
-#define SPEED 150 // Motor speed DON"T CHANGE UNLESS REALLY NECESSARY
-#define DEFAULT_TIME 100 // Default time for movement
+#define SPEED 200 // Motor speed DON"T CHANGE UNLESS REALLY NECESSARY
+#define GYRO_Z_OFFSET -22 // define the gyroscope z offset
 
 // Function Declarations
 long distanceInCM();
-void forward(int time = DEFAULT_TIME);
-void reverse(int time = DEFAULT_TIME);
-void turnRight(int time = DEFAULT_TIME);
-void turnLeft(int time = DEFAULT_TIME);
-void turnSharpRight(int time = DEFAULT_TIME);
-void turnSharpLeft(int time = DEFAULT_TIME);
+void forward();
+void turnRight();
+void turnLeft();
 void stopMoving();
 void turnMotorsOff();
 void setMotorSpeed(int speed = SPEED);
+void gyroUpdate();
 
-Servo ultraSonicServo;
-int right = 0, sharpRight = 0, left = 0, sharpLeft = 0, forwardCounter = 0;
+Servo ultraSonicServo; // new servo object
+MPU6050 gyroScope; // new MPU6050 object
+
+float gyroDegree = 0;
+
+boolean oneLoopComplete = false;
+float previousTime;
 
 void setup()
 {
-  Serial.begin(9600); // Open serial for communication
-
+  Serial.begin(115200); // open serial for gyro testing
+  ultraSonicServo.write(15);
+  
+  // Motor stuff
   pinMode(ENA, OUTPUT); // enables left side
   pinMode(ENB, OUTPUT); // enables right side
 
@@ -48,21 +56,42 @@ void setup()
   pinMode(IN3, OUTPUT); // right side backwards
   pinMode(IN4, OUTPUT); // right side forward
 
-  pinMode(ECHO, INPUT); // Pulse receiver
-  pinMode(TRIG, OUTPUT); // Pulse generator
-
   setMotorSpeed(); // Set move speed to SPEED
 
+  // Ultrasonic sensor stuff
+  pinMode(ECHO, INPUT); // Pulse receiver
+  pinMode(TRIG, OUTPUT); // Pulse generator
   ultraSonicServo.attach(SRVO); // Attach ultrasonic servo motor
 
-  ultraSonicServo.write(0); // Turn Sensor to the right
-  delay(3000); // wait 3 seconds to start
+  // IMU Stuff
+  Wire.begin();
+  gyroScope.initialize(); // initialize the IMU
+  gyroScope.CalibrateGyro(); // Calibrate the IMU
+  gyroScope.setZGyroOffset(GYRO_Z_OFFSET); // Set the z offset
+  gyroScope.CalibrateGyro(6); // calibrate it again after the offset
 
 }
 
 void loop()
 {
+  gyroUpdate();
+  Serial.println(gyroDegree); // outputs orientation in degrees for troubleshooting
   moveRightAroundObject(); // move right around the object forever
+}
+
+void gyroUpdate()
+{
+  float gyroZ = gyroScope.getRotationZ() / 131.0; // get the current Z orientation in degrees/second
+  if (oneLoopComplete) {
+    float timeForOneLoop = micros() - previousTime; // calculates how long loop took
+    gyroDegree += gyroZ * timeForOneLoop / 1000000.0; // calculates new orientation based on the degrees/s * seconds
+  }
+  previousTime = micros();
+
+  // Change the boolean flag to true to enable collection of gyroscope data
+  if (!oneLoopComplete) {
+    oneLoopComplete = true;
+  }
 }
 
 // Move in right circle around object
@@ -70,52 +99,24 @@ void moveRightAroundObject()
 {
   ultraSonicServo.write(0); // turns ultrasonic sensor to the right
 
-  int x = distanceInCM(); // pings distance away from object
-  Serial.println(x); // for debug
-  
-  if (x < 35) // if too close to the object, turn left
+  if (gyroDegree < -1790)
   {
-    left++;
-    right = 0;
-    sharpRight = 0;
-
-    if (left = 5) // checks if the same reading has happened 5 times
-    {             // to reduce probability of outlier
-      turnLeft();
-      left = 0;
-    }
+    turnMotorsOff();
+    return;
   }
-  else if (x > 185 && forwardCounter > 1) // if the robot detects open space
-  { // it does a 90 degree right turn as long as its had at least 2 forward movements
-    sharpRight++;
-    left = 0;
-    right = 0;
-    forward(20);
-    if (sharpRight == 5) // again, it only does the turn if it has got 5 consistent readings
-    {
-      sharpRight = 0;
-      forward(500);
-      turnSharpRight(500);
-      forward(1000);
-      forwardCounter = 0;
-    }
-  }
-  else if (x > 40) // if too far away, turn right
-  {
-    left = 0;
-    right++;
-    sharpRight = 0;
     
-    if (right == 5)
-    {
-      turnRight();
-      right = 0;
-    }
-  }
-  else // else. the robot continues straight
+  int x = distanceInCM(); // pings distance away from object
+  if (x < 30) // if too close to the object, turn left
   {
-    forwardCounter++;
-    forward(300);
+    turnLeft();
+  }
+  else if (x > 35) 
+  {
+    turnRight();
+  }
+  else
+  {
+    forward();
   }
 
 }
@@ -134,61 +135,35 @@ long distanceInCM()
 }
 
 // Move car forwards
-void forward(int time = DEFAULT_TIME)
+void forward()
 {
+  setMotorSpeed();
   digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
   digitalWrite(IN4, HIGH);
-  delay(time);
-  stopMoving();
-}
-
-// Move car backwards
-void reverse(int time = DEFAULT_TIME)
-{
-  digitalWrite(IN2, HIGH);
-  digitalWrite(IN3, HIGH);
-  delay(time);
-  stopMoving();
 }
 
 // Turns car in a wide right arc
-void turnRight(int time = DEFAULT_TIME)
+void turnRight()
 {
-  digitalWrite(IN1, HIGH);
-  analogWrite(ENB, 25); // make this higher to make the turn wider
-  digitalWrite(IN4, HIGH); 
-  delay(time);
   setMotorSpeed();
-  stopMoving();
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  analogWrite(ENB, 10); // make this higher to make the turn wider
+  digitalWrite(IN4, HIGH);
 }
 
 // Turns car in a wide left arc
-void turnLeft(int time = DEFAULT_TIME)
+void turnLeft()
 {
-  digitalWrite(IN4, HIGH);
-  analogWrite(ENA, 0); // make this higher to make the turn wider
-  digitalWrite(IN1, HIGH);
-  delay(time);
   setMotorSpeed();
-  stopMoving();
-}
-
-// Turns car in a sharp right arc
-void turnSharpRight(int time = DEFAULT_TIME)
-{
-  digitalWrite(IN1, HIGH);
-  digitalWrite(IN3, HIGH);
-  delay(time);
-  stopMoving();
-}
-
-// Turns car in a sharp left arc
-void turnSharpLeft(int time = DEFAULT_TIME)
-{
-  digitalWrite(IN2, HIGH);
   digitalWrite(IN4, HIGH);
-  delay(time);
-  stopMoving();
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN2, LOW);
+  analogWrite(ENA, 10); // make this higher to make the turn wider
+  digitalWrite(IN1, HIGH);
 }
 
 // Stops the car's motors temporarily
