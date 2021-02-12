@@ -1,5 +1,5 @@
 /*
-   Smart Car Program Version 1.02
+   Smart Car Program Version 1.03
    By: Evyn Rissling, Curtis Eck, Brandon Jones
    
    This program makes the robot do five clockwise loops, 
