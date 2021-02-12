@@ -84,7 +84,7 @@ void setup()
 
   // turns robot 180 degrees around
   gyroDegree = 0;
-  while (gyroDegree > -140)
+  while (gyroDegree > -150)
   {
     gyroUpdate();
     sharpTurnRight();
@@ -150,18 +150,18 @@ void moveRightAroundObject()
   {
     gyroUpdate(); // updates the gyroscope
     
-    if (gyroDegree < -1780) // turns the motors off if the car has completed 5 loops
+    if (gyroDegree <= -1790) // turns the motors off if the car has completed 5 loops
     {
       turnMotorsOff();
       return;
     }
 
     int x = distanceInCM(); // pings distance away from object
-    if (x < 35) // if too close to the object, turn left
+    if (x < 36) // if too close to the object, turn left
     {
       turnLeft();
     }
-    else if (x > 37) // if too far from the object, turn right
+    else if (x > 38) // if too far from the object, turn right
     {
       turnRight();
     }
@@ -181,18 +181,18 @@ void moveLeftAroundObject()
   {
     gyroUpdate(); // updates the orientation of the gyroscope
     
-    if (gyroDegree > 1790) // turns the motors off if 5 loops have been completed
+    if (gyroDegree > 1810) // turns the motors off if 5 loops have been completed
     {
       turnMotorsOff();
       return;
     }
 
     int x = distanceInCM(); // pings distance away from object
-    if (x < 35) // if too close to the object, turn right
+    if (x < 36) // if too close to the object, turn right
     {
       turnRight();
     }
-    else if (x > 37) // if too far from the object, turn left
+    else if (x > 38) // if too far from the object, turn left
     {
       turnLeft();
     }
